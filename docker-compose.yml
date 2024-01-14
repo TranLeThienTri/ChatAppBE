@@ -1,0 +1,55 @@
+version: '3.8'
+services:
+  # container db
+  dev-database:
+    container_name: dev-database
+    image: postgres:15.0
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: abc123
+      POSTGRES_DB: db-app-chat
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - nestjs-network
+
+  # container prisma orm
+  prisma:
+    build:
+      context: .
+      dockerfile: prisma.Dockerfile
+    ports:
+      - '5555:5555'
+    depends_on:
+      - dev-database
+    environment:
+      DATABASE_URL: postgresql://postgres:abc123@dev-database:5432/db-app-chat
+    env_file:
+      - .env
+    networks:
+      - nestjs-network
+
+  # container-nestjs nãy quên build cái này ^^
+  nestjs-app:
+    container_name: nestjs-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      - prisma
+    environment:
+      DATABASE_URL: postgresql://postgres:abc123@dev-database:5432/db-app-chat
+    env_file:
+      - .env
+    networks:
+      - nestjs-network
+
+networks:
+  nestjs-network:
+
+volumes:
+  postgres:

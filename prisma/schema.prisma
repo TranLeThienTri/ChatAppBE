@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js" 
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  // binaryTargets = ["native", "linux-musl-openssl-3.0.x", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  email String @unique
+  userName String
+  hashPassword String
+  avatar String?
+  bio String?
+  refreshToken String?
+  verifycode String?
+  isVerify Boolean @default(false)
+  role String @default("user")  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  posts Post[]
+  images   Image[]
+
+  messagesSent   Message[]  @relation("Sender")
+  messagesReceived Message[] @relation("Receiver")
+  @@map("users")
+}
+
+model Message {
+  msg_id Int @id @default(autoincrement())
+  content String?
+  sendAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  sendUserId    Int
+  receiverUserId Int
+  sender  User @relation("Sender", fields: [sendUserId], references: [id])
+  receiver User  @relation("Receiver", fields: [receiverUserId], references: [id])
+  @@map("messages")
+}
+model Post {
+  post_id Int @id @default(autoincrement())
+  content String
+  image String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  @@map("posts")
+} 
+model Image {
+  id Int @id @default(autoincrement())
+  filename  String
+  filepath  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  @@map("images")
+}
+

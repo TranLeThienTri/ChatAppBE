@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "users" ALTER COLUMN "repeat" SET DEFAULT '0',
+ALTER COLUMN "repeat" SET DATA TYPE TEXT;

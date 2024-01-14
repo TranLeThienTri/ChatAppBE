@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat App</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <style>
+    body {
+      background-color: aqua;
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    #left,
+    #right {
+      min-height: 500px;
+    }
+
+    #left {
+      width: 20%;
+      float: left;
+      background-color: blueviolet;
+    }
+
+    #right {
+      width: 80%;
+      float: right;
+      background-color: pink;
+    }
+
+    #chatMessages,
+    #messageInput {
+    }
+
+  </style>
+</head>
+<h1>Chat App</h1>
+<div id="left">
+  <h3>Tất cả người dùng</h3>
+  <div id="users"></div>
+</div>
+<div id="right">
+  <div id="repUser"></div>
+  <div id="oldMessages"></div>
+  <div id="chatMessages"></div>
+  <input id="messageInput" placeholder="Enter message">
+  <button id="sendPrivateMessage">Send</button>
+</div>
+<script src="./xuly.js"></script>
+</body>
